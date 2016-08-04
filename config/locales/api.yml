@@ -8,3 +8,15 @@ en:
     missing_params: "Missing user parameter"
     invalid_token: "Invalid token, email, or combination"
     not_authenticated: "Not authenticated"
+    sign_up:
+      success: "Sign up successfully"
+      fails: "Invalid sign up"
+    send_pin_sucess: Send pin successful, please check the your phone!
+    pin_invalid: PIN is invalid
+    pin_valid: PIN is valid
+    phone_number_invalid: "Invalid phone number"
+    phone_number_not_found: The phone number you have sent not found!
+    password_invalid:  Password is invalid
+    update:
+      success: Update success
+      fail:  Update failure
