@@ -3,8 +3,10 @@ class CreateInvoices < ActiveRecord::Migration[5.0]
     create_table :invoices do |t|
       t.string :name
       t.string :address
-      t.float :latitude
-      t.float :longitude
+      t.float :latitude_start
+      t.float :longitude_start
+      t.float :latitude_finish
+      t.float :longitude_finish
       t.string :delivery_time
       t.float :distance
       t.string :description

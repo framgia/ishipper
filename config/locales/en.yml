@@ -24,3 +24,7 @@ en:
   your_pin: Your PIN is %{pin}
   messages:
     wrong_permission: "You do not have permission!"
+  invalid_login: invalid email and password combination
+  login_error: Error with your login or password
+  missing_params: missing user_login parameter
+  failed: "false"

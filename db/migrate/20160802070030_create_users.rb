@@ -8,7 +8,7 @@ class CreateUsers < ActiveRecord::Migration[5.0]
       t.float :longitude
       t.string :phone_number
       t.string :plate_number
-      t.integer :status
+      t.integer :status, default: 0
       t.integer :role
       t.float :rate
       t.string :pin
