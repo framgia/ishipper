@@ -5,7 +5,8 @@ class User < ApplicationRecord
     :rememberable, :trackable, :validatable
 
   geocoded_by :current_location
-  reverse_geocoded_by :latitude, :longitude, if: :address_changed?
+  reverse_geocoded_by :latitude, :longitude, address: :current_location,
+    if: :address_changed?
   after_validation :geocode, :reverse_geocode
 
   has_many :invoices, dependent: :destroy
