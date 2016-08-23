@@ -5,7 +5,7 @@ User.create! name: "shipper1",
   phone_number: "0123456789",
   plate_number: "29X5-56789",
   status: "actived",
-  role: 2,
+  role: 1,
   password: "123456"
 User.create! name: "shipper2",
   email: "shipper2@gmail.com",

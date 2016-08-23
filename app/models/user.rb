@@ -20,6 +20,7 @@ class User < ApplicationRecord
     foreign_key: "owner_id", dependent: :destroy
   has_many :passive_notifications, class_name: "Notification",
     foreign_key: "recipient_id", dependent: :destroy
+  has_many :invoice_histories
 
   enum status: [:unactive, :actived, :block_temporary, :blocked]
   enum role: ["admin", "shop", "shipper"]

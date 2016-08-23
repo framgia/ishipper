@@ -13,25 +13,14 @@
 ActiveRecord::Schema.define(version: 20160803021915) do
 
   create_table "invoice_histories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "name"
-    t.string   "address_start"
-    t.float    "latitude_start",   limit: 24
-    t.float    "longitude_start",  limit: 24
-    t.string   "address_finish"
-    t.float    "latitude_finish",  limit: 24
-    t.float    "longitude_finish", limit: 24
-    t.string   "delivery_time"
-    t.float    "distance",         limit: 24
-    t.string   "description"
-    t.float    "price",            limit: 24
-    t.float    "shipping_price",   limit: 24
-    t.integer  "status"
-    t.float    "weight",           limit: 24
-    t.string   "customer_name"
-    t.string   "customer_number"
+    t.string   "attribute_name"
+    t.string   "before_value"
+    t.string   "after_value"
+    t.integer  "user_id"
     t.integer  "invoice_id"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.index ["invoice_id"], name: "index_invoice_histories_on_invoice_id", using: :btree
   end
 
   create_table "invoices", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -78,10 +67,13 @@ ActiveRecord::Schema.define(version: 20160803021915) do
   end
 
   create_table "user_invoice_histories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "status"
+    t.string   "attribute_name"
+    t.string   "before_value"
+    t.string   "after_value"
     t.integer  "user_invoice_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.index ["user_invoice_id"], name: "index_user_invoice_histories_on_user_invoice_id", using: :btree
   end
 
   create_table "user_invoices", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -128,8 +120,10 @@ ActiveRecord::Schema.define(version: 20160803021915) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
+  add_foreign_key "invoice_histories", "invoices"
   add_foreign_key "invoices", "users"
   add_foreign_key "reviews", "invoices"
+  add_foreign_key "user_invoice_histories", "user_invoices"
   add_foreign_key "user_invoices", "invoices"
   add_foreign_key "user_invoices", "users"
 end
