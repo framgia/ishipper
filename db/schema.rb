@@ -124,6 +124,7 @@ ActiveRecord::Schema.define(version: 20160915042125) do
     t.float    "rate",                   limit: 24
     t.string   "pin"
     t.string   "authentication_token"
+    t.string   "notification_token"
     t.boolean  "signed_in"
     t.datetime "created_at",                                     null: false
     t.datetime "updated_at",                                     null: false

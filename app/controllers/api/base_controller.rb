@@ -1,6 +1,7 @@
 class Api::BaseController < ActionController::API
   include Authenticable
   include Confirm
+  include Notification
   acts_as_token_authentication_handler_for User, {fallback: :none}
 
   respond_to :json
