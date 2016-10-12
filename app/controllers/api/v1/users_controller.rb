@@ -7,6 +7,9 @@ class Api::V1::UsersController < Api::BaseController
   def show
     serializer = ActiveModelSerializers::SerializableResource.new(@user,
       params).as_json
+    scope = set_data_notification @user.notification_token,
+      "Notification", "Hello world", 1, 1, @user.id
+    send_notification scope
     render json: {message: I18n.t("users.show.success"),
       data: {user: serializer}, code: 1}, status: 200
   end

@@ -14,6 +14,7 @@ class CreateUsers < ActiveRecord::Migration[5.0]
       t.float :rate
       t.string :pin
       t.string :authentication_token
+      t.string :notification_token
       t.boolean :signed_in
 
       t.timestamps
