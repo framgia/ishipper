@@ -61,5 +61,8 @@ Rails.application.routes.draw do
     resources :invoices
     resources :list_shippers, only: :index
   end
-  resources :users
+
+  scope do
+    resources :users, path: "shops"
+  end
 end
