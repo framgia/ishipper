@@ -1,5 +1,6 @@
 from_phone_number: "(201) 820-0732"
 max_invoice: 5
+max_distance: 15
 new_shipper_invoice: 15
 check_shipped_invoice: 3
 list_shipper_register: "com.framgia.ishipper.LIST_SHIPPER_REGISTER"
@@ -43,3 +44,4 @@ rate:
 realtime:
   unread_notification: "unread_notification"
   basic: "Basic "
+  new_invoice: "new_invoice"

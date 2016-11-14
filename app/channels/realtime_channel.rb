@@ -5,6 +5,8 @@ class RealtimeChannel < ApplicationCable::Channel
     if user_token
       channel_name = "#{user_token.user.phone_number}_realtime_channel"
       stream_from channel_name
+      # binding.pry
+      self.current_user.update_attribute "online", true
       data = Hash.new
       data[:unread_notification] = user_token.user.user_setting.unread_notification
       RealtimeBroadcastJob.perform_now channel: channel_name,
@@ -13,6 +15,7 @@ class RealtimeChannel < ApplicationCable::Channel
   end
 
   def unsubscribed
+    self.current_user.update_attribute "online", false
     # Any cleanup needed when channel is unsubscribed
   end
 end
