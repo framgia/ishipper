@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  skip_before_action :authenticate_user!
+  before_action :check_admin_signin
 
   def index
     @feed_back = FeedBack.new

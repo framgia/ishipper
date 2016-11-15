@@ -1,4 +1,7 @@
 class Shop::ShopBaseController < ApplicationController
+  before_action :check_admin_signin
+  before_action :authenticate_user!
+
   include ActionController::Serialization
 
   private

@@ -1,0 +1,16 @@
+<div class="td-manage-user-edit">
+  <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6 td-manage-users-button">
+    <%= form_for [:admin_manage, @user] do |user| %>
+      <%= user.hidden_field :status, value: "block_temporary" %>
+      <%= user.submit t("manage_users.edit.block_temporary"), class: "btn btn-warning
+        width", data: {confirm: t("manage_users.edit.confirm")} %>
+    <% end %>
+  </div>
+  <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6 td-manage-users-button">
+    <%= form_for [:admin_manage, @user] do |user| %>
+      <%= user.hidden_field :status, value: "blocked" %>
+      <%= user.submit t("manage_users.edit.blocked"), class: "btn btn-danger
+        width", data: {confirm: t("manage_users.edit.confirm")} %>
+    <% end %>
+  </div>
+</div>

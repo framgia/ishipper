@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
   skip_load_and_authorize_resource only: :index
+  before_action :authenticate_user!
   before_action :load_support, only: [:index, :show]
 
   def index
