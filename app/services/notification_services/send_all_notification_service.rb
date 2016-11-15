@@ -17,7 +17,7 @@ class NotificationServices::SendAllNotificationService
       if @notification
         user_setting.update! unread_notification: user_setting.unread_notification + 1
         if user_setting.receive_notification?
-          Notifications::SendNotificationJob.perform_now @notification, @owner,
+          Notifications::SendNotificationJob.perform_later @notification, @owner,
             recipient, @content, @invoice, @click_action
         end
       end

@@ -30,6 +30,9 @@ class Api::V1::Shop::InvoicesController < Api::ShopBaseController
   def create
     invoice = current_user.invoices.build invoice_params
     passive_favorites = current_user.passive_favorites
+    near_shippers = User.near([invoice.latitude_start, invoice.longitude_start],
+      Settings.max_distance).shipper
+    # binding.pry
     if invoice.save
       InvoiceHistoryCreator.new(invoice, current_user.id).create_history invoice_params
       click_action = Settings.invoice_detail
@@ -39,6 +42,9 @@ class Api::V1::Shop::InvoicesController < Api::ShopBaseController
         NotificationServices::SendAllNotificationService.new(owner: current_user,
           recipients: passive_favorites, content: "favorite", invoice: invoice,
           click_action: click_action).perform
+      end
+      if near_shippers.any?
+        InvoiceServices::RealtimeCreateInvoiceService.new(recipients: near_shippers, invoice: invoice).perform
       end
     else
       render json: {message: error_messages(invoice.errors.messages), data: {},
