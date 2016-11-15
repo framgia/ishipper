@@ -36,13 +36,14 @@ class User < ApplicationRecord
   has_many :user_tokens, dependent: :destroy
 
   enum status: [:unactive, :actived, :block_temporary, :blocked]
-  enum role: ["admin", "shop", "shipper"]
+  enum role: ["shop", "shipper"]
 
   scope :search_user, -> role, data {where("role = ? AND (phone_number = ? OR
     name LIKE ?)", role, data, "%#{data}%")}
+  scope :order_by_time, -> {order created_at: :desc}
 
   ATTRIBUTES_PARAMS = [:phone_number, :name, :email, :address, :latitude,
-    :longitude, :plate_number, :role, :password, :password_confirmation, :avatar,
+    :longitude, :plate_number, :role, :password, :password_confirmation,
     :current_location]
 
   UPDATE_ATTRIBUTES_PARAMS = [:name, :email, :address, :plate_number,

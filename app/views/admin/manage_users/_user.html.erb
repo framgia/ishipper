@@ -1,0 +1,10 @@
+<% @users.each do |user| %>
+  <tr>
+    <td><%= link_to user.name, admin_manage_user_path(user) %></td>
+    <td><%= user.email %></td>
+    <td><%= user.phone_number %></td>
+    <td><%= user.role %></td>
+    <td></td>
+    <td></td>
+  </tr>
+<% end %>

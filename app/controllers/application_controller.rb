@@ -1,8 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
 
-  before_action :authenticate_user!
-
   include CanCan::ControllerAdditions
 
   rescue_from CanCan::AccessDenied do |exception|
@@ -25,5 +23,20 @@ class ApplicationController < ActionController::Base
     controller_name_segments.pop
     controller_namespace = controller_name_segments.join('/').camelize
     Ability.new current_user, controller_namespace
+  end
+
+  def layout_by_user
+    if admin_admin_signed_in?
+      redirect_to "/admin"
+    elsif user_signed_in?
+      redirect_to root_path
+    else
+    end
+  end
+
+  def check_admin_signin
+    if admin_admin_signed_in?
+      redirect_to admin_path
+    end
   end
 end
