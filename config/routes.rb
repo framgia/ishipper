@@ -62,4 +62,9 @@ Rails.application.routes.draw do
     resources :list_shippers, only: :index
   end
   resources :users
+  namespace :admin do
+    root "manage_users#index", path: ""
+    devise_for :admins, path: ""
+    resources :manage_users, only: [:index, :show, :update]
+  end
 end
