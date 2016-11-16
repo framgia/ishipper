@@ -8,6 +8,7 @@
     <%= javascript_include_tag "application",
       "data-turbolinks-track": "reload" %>
     <meta name="turbolinks-cache-control" content="no-cache">
+    <link rel="manifest" href="/manifest.json">
   </head>
 
   <body>
@@ -28,5 +29,29 @@
       <%= render "layouts/body_form" %>
     <% end %>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAik8OVJ3_JisisBdw7aS20dQDt3lD1bG0&sensor=false&libraries=places&callback=initAutocomplete" data-turbolinks-eval="false" ></script>
+    <script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
+    <script>
+      var config = {
+        apiKey: "AIzaSyDsWdtzaA6H69wu61G5dAutimbL48TKHTY",
+        authDomain: "ishipperandroid.firebaseapp.com",
+        databaseURL: "https://ishipperandroid.firebaseio.com",
+        storageBucket: "ishipperandroid.appspot.com",
+        messagingSenderId: "390344509677"
+      };
+      firebase.initializeApp(config);
+
+      const messaging = firebase.messaging();
+      messaging.requestPermission()
+      .then(function() {
+        console.log('have permission');
+        return messaging.getToken()
+      })
+      .then(function(currentToken) {
+        console.log(currentToken);
+      })
+      .catch(function(err) {
+        console.log('co loi xay ra', err);
+      })
+    </script>
   </body>
 </html>
