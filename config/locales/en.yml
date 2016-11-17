@@ -46,7 +46,7 @@ en:
   _your_invoices: Your invoices
   _profile: Profile
   close: Close
-  from: "From "
-  to: " to "
+  from: "From: "
+  to: "To: "
   confirm:
     you_sure: Are you sure?
