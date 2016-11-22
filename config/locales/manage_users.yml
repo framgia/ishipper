@@ -1,0 +1,17 @@
+en:
+  manage_users:
+    index:
+      title: Manage Users
+      user:
+        name: Name
+        email: Email
+        phone_number: Phone Number
+        role: Role
+        action: Action
+    edit:
+      block_temporary: Block Temporary
+      blocked: Block
+      confirm: Are You Sure???
+    update:
+      success: Update sucsessfully
+      error: Update Error

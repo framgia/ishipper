@@ -42,58 +42,10 @@
             </i><%= @user.phone_number %>
           </p>
           <hr>
-          <div class="nht-user-rate">
-            <h4><%= t "users.rate" %></h4>
-            <div class="col-sm-4 col-xs-4 col-md-4 col-lg-4 nht-user-rate-left">
-              <div class="nht-user-rate-content">
-                <h1><%= @user.rate %></h1>
-              </div>
-              <div class="nht-user-rate-sum">
-                <%= t "users.sum_rate", sum: @supports.sum_rate %>
-              </div>
-            </div>
-            <div class="col-sm-8 col-xs-8 col-md-8 col-lg-8 nht-user-rate-right">
-              <div class="bar-content five">
-                <i class="fa fa-star star"> <%= Settings.rate.load_five_star %></i>
-                <span class="bar" data-id="<%= @supports.load_five_star %>">
-                  <%= @supports.load_five_star %>
-                </span>
-                <div class="clearfix"></div>
-              </div>
-
-              <div class="bar-content four">
-                <i class="fa fa-star star"> <%= Settings.rate.load_four_star %></i>
-                <span class="bar" data-id="<%= @supports.load_four_star %>">
-                <%= @supports.load_four_star %></span>
-                <div class="clearfix"></div>
-              </div>
-
-              <div class="bar-content three">
-                <i class="fa fa-star star"> <%= Settings.rate.load_three_star %></i>
-                <span class="bar" data-id="<%= @supports.load_three_star %>">
-                  <%= @supports.load_three_star %>
-                </span>
-                <div class="clearfix"></div>
-              </div>
-
-              <div class="bar-content two">
-                <i class="fa fa-star star"> <%= Settings.rate.load_two_star %></i>
-                <span class="bar" data-id="<%= @supports.load_two_star %>">
-                  <%= @supports.load_two_star %>
-                </span>
-                <div class="clearfix"></div>
-              </div>
-
-              <div class="bar-content one">
-                <i class="fa fa-star star"> <%= Settings.rate.load_one_star %></i>
-                <span class="bar" data-id="<%= @supports.load_one_star %>">
-                  <%= @supports.load_one_star %>
-                </span>
-                <div class="clearfix"></div>
-              </div>
-
-            </div>
-          </div>
+        </div>
+        <hr>
+        <div class="w3-container">
+          <%= render "edit" %>
         </div>
       </div><br>
     </div>

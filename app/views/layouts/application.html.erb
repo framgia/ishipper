@@ -24,6 +24,21 @@
         </i>
         <%= render "layouts/body_form" %>
       </div>
+    <% elsif admin_admin_signed_in?%>
+      <div class="col-sm-3 col-lg-2">
+        <%= render "layouts/admin_sidebar" %>
+      </div>
+      <div class="col-sm-9 col-lg-10 padding">
+        <div class="row">
+          <div id="flash">
+            <% flash.each do |message_type, message| %>
+              <div class="alert alert-<%= message_type %> nht-flash"><%= message %></div>
+            <% end %>
+            <div class="clearfix"></div>
+          </div>
+          <%= yield %>
+        </div>
+      </div>
     <% else %>
       <%= render "layouts/body_form" %>
     <% end %>

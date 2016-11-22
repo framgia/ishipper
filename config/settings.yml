@@ -3,6 +3,7 @@ max_invoice: 5
 max_distance: 15
 new_shipper_invoice: 15
 check_shipped_invoice: 3
+per_page: 7
 list_shipper_register: "com.framgia.ishipper.LIST_SHIPPER_REGISTER"
 invoice_detail: "com.framgia.ishipper.INVOICE_DETAIL"
 invoice:

@@ -1,0 +1,29 @@
+<div class="td-manage-user col-xs-10 col-sm-10 col-md-10 col-lg-10
+  col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 padding">
+  <%= t "manage_users.index.title" %>
+
+  <table class="td-table table table-hover table-striped">
+    <tr>
+      <th>
+        <%= t "manage_users.index.user.name" %>
+      </th>
+      <th>
+        <%= t "manage_users.index.user.email" %>
+      </th>
+      <th>
+        <%= t "manage_users.index.user.phone_number" %>
+      </th>
+      <th>
+        <%= t "manage_users.index.user.role" %>
+      </th>
+      <th>
+        <%= t "manage_users.index.user.action" %>
+      </th>
+      <th>
+      </th>
+    </tr>
+    <%= render "user" %>
+  </table>
+  <div class="clearfix"></div>
+  <%= paginate @users %>
+</div>

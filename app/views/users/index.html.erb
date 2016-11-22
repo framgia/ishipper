@@ -1,30 +1,32 @@
-<div class="col-xs-6 col-sm-6 col-md-8 col-lg-8
+<div class="td-fix-list">
+  <div class="col-xs-6 col-sm-6 col-md-8 col-lg-8
     col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-log-offset-1 nht-list-user">
-  <ul class="nav nav-tabs nht-tabs">
-    <li class="active"><a data-toggle="tab" href="#favorite">
-      <%= t "users.favorite" %></a>
-    </li>
-    <li><a data-toggle="tab" href="#black">
-      <%= t "users.black" %></a>
-    </li>
+    <ul class="nav nav-tabs nht-tabs">
+      <li class="active"><a data-toggle="tab" href="#favorite">
+        <%= t "users.favorite" %></a>
+      </li>
+      <li><a data-toggle="tab" href="#black">
+        <%= t "users.black" %></a>
+      </li>
 
-    <div class="nht-search-icon">
-      <%= image_tag "searchicon.png", class: "nht-searchicon" %>
-    </div>
-    <div>
-      <%= text_field_tag :name, nil, placeholder: t("users.search"), id: "search-user" %>
-    </div>
-  </ul>
-</div>
-<div class="col-xs-6 col-sm-6 col-md-10 col-lg-10
+      <div class="nht-search-icon">
+        <%= image_tag "searchicon.png", class: "nht-searchicon" %>
+      </div>
+      <div>
+        <%= text_field_tag :name, nil, placeholder: t("users.search"), id: "search-user" %>
+      </div>
+    </ul>
+  </div>
+  <div class="col-xs-6 col-sm-6 col-md-10 col-lg-10
     col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-log-offset-1 nht-index-user">
-  <hr>
-  <div class="tab-content">
-    <div id="favorite" class="tab-pane fade in active">
-      <%= render "favorite", favorites: @supports.favorite_list_users %>
-    </div>
-    <div id="black" class="tab-pane fade">
-      <%= render "black", blacks: @supports.black_list_users %>
+    <hr>
+    <div class="tab-content">
+      <div id="favorite" class="tab-pane fade in active">
+        <%= render "favorite", favorites: @supports.favorite_list_users %>
+      </div>
+      <div id="black" class="tab-pane fade">
+        <%= render "black", blacks: @supports.black_list_users %>
+      </div>
     </div>
   </div>
 </div>

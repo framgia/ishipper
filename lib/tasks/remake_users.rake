@@ -1,6 +1,13 @@
 namespace :db do
   desc "Import user"
   task users: [:environment] do
+    admin = Admin.create!(
+      name: "ADMIN 1",
+      phone_number: "+841679999999",
+      password: "12345678",
+      password_confirmation: "12345678",
+      email: "admin1@gmail.com"
+      )
     user1 = User.create!(
       name: "SHOP 1",
       phone_number: "+841694949947",
@@ -168,20 +175,6 @@ namespace :db do
       rate: 1.5)
     user13.user_tokens.create! authentication_token: Devise.friendly_token
     user13.create_user_setting unread_notification: 0
-
-    user14 = User.create!(
-      name: "ADMIN",
-      phone_number: "+841234567890",
-      password: "12345678",
-      password_confirmation: "12345678",
-      email: "admin@framgia.com",
-      role: "admin",
-      status: "actived",
-      latitude: 21.0092948,
-      longitude: 105.8099247,
-      rate: 2.5)
-    user14.user_tokens.create! authentication_token: Devise.friendly_token
-    user14.create_user_setting unread_notification: 0
 
     user15 = User.create!(
       name: "SHIPPER98",
