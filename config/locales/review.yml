@@ -5,7 +5,7 @@ en:
     invoice:
       status_fail: Can't report this invocie
       shipper_fail: You must receive invoice to report
-      report_exist: Report exist, can't report continue
+      report_exist: "Report exist, can't report continue"
     review_type_fail: "Fail type, you can't report this invoice"
   rate:
     create_success: Create rate success!!
@@ -21,6 +21,7 @@ en:
     missing_params: "Missing rate parameter"
     update:
       success: "Rate update successfully"
+      fails: "Could not update rate"
     delete:
       success: "Rate delete successfully"
       fails: "Could not delete rate"
