@@ -17,7 +17,7 @@ class Api::SessionsController < Devise::SessionsController
         generate_user_token
         @user.update_attributes signed_in: true
         serializer = ActiveModelSerializers::SerializableResource.new(@user,
-          scope: {authentication: true, user_token: @user_token}).as_json
+          scope: {authentication: true, user_token: @user_token, current_user: current_user}).as_json
         render json: {message: t("api.sign_in.success"),
           data: {user: serializer}, code: 1}, status: 200
         return

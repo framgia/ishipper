@@ -9,7 +9,8 @@ class Api::V1::Shop::ReviewsController < Api::ShopBaseController
 
   private
   def ensure_params_true
-    unless CheckParams.new(Review::REVIEW_ATTRIBUTES_PARAMS, params[:review]).params_exist?
+    unless CheckParams.new(attributes_params: Review::REVIEW_ATTRIBUTES_PARAMS,
+      params: params[:review]).perform?
       render json: {message: I18n.t("review.missing_params"), data: {}, code: 0},
         status: 422
     end

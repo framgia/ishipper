@@ -4,7 +4,7 @@ class Invoice < ApplicationRecord
 
   has_many :user_invoices, dependent: :destroy
   has_many :reviews, dependent: :destroy
-  has_many :invoice_histories, dependent: :destroy
+  has_many :invoice_histories
   has_many :all_shipper, through: :user_invoices, source: :user
 
   belongs_to :user

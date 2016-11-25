@@ -6,10 +6,10 @@ class Api::V1::Shipper::UserInvoicesController < Api::ShipperBaseController
 
   def create
     @user_invoice = current_user.user_invoices.build user_invoice_params
-    if ShipperReceiveLimit.new(@user_invoice, current_user.id).check_new_shipper?
+    if ShipperReceiveLimitServices::NewShipperLimitService.new(user_id: current_user.id).perform?
       if @user_invoice.save
-        InvoiceHistoryCreator.new(@invoice, current_user.id).
-          create_user_invoice_history @user_invoice, "init"
+        HistoryServices::CreateUserInvoiceHistoryService.new(user_invoice: @user_invoice,
+          creater_id: current_user.id, status: "init").perform
         click_action = Settings.list_shipper_register
         NotificationServices::CreateNotificationService.new(owner: current_user,
           recipient: @invoice.user, content: "receive", invoice: @invoice,
@@ -21,10 +21,10 @@ class Api::V1::Shipper::UserInvoicesController < Api::ShipperBaseController
           code: 0}, status: 200
       end
     else
-      if ShipperReceiveLimit.new(@user_invoice, current_user.id).check_old_shipper?
+      if ShipperReceiveLimitServices::OldShipperLimitService.new(user_id: current_user.id).perform?
         if @user_invoice.save
-          InvoiceHistoryCreator.new(@invoice, current_user.id).
-            create_user_invoice_history @user_invoice, "init"
+          HistoryServices::CreateUserInvoiceHistoryService.new(user_invoice: @user_invoice,
+            creater_id: current_user.id, status: "init").perform
           click_action = Settings.list_shipper_register
           NotificationServices::CreateNotificationService.new(owner: current_user,
             recipient: @invoice.user, content: "receive", invoice: @invoice,

@@ -3,7 +3,8 @@ class Api::V1::Shop::UserInvoicesController < Api::ShopBaseController
     :check_black_list
 
   def update
-    if InvoiceStatus.new(@invoice, @user_invoice, "waiting", current_user).accept_shipper
+    if InvoiceServices::ShopAcceptShipperService.new(invoice: @invoice,
+      user_invoice: @user_invoice, status: "waiting", current_user: current_user).perform
       render json: {message: I18n.t("invoices.accept_shipper.success"),
         data: {user_invoice: @user_invoice}, code: 1}, status: 200
     else
@@ -21,7 +22,8 @@ class Api::V1::Shop::UserInvoicesController < Api::ShopBaseController
     @user_invoices = UserInvoice.find_by(id: params[:id]).user.user_invoices
     user_invoices_init = @user_invoices.init
     unless @user_invoices.waiting.count < Settings.max_invoice
-      ShipperReceiveLimit.new(user_invoices_init, 0).update_status
+      ShipperReceiveLimitServices::ShopCheckLimitedShipperService.new(user_invoices: user_invoices_init,
+        user_id: 0).perform
       render json: {message: I18n.t("user_invoices.receive_invoice.limit"),
         data: {user_invoice: @user_invoice}, code: 1}, status: 200
     end

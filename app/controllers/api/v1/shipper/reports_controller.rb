@@ -7,8 +7,9 @@ class Api::V1::Shipper::ReportsController < Api::ShipperBaseController
     @report.owner = current_user
     @report.recipient = @invoice.user
     if @report.save
-      InvoiceStatus.new(@invoice, @user_invoice, "cancel", current_user).
-        shipper_update_status if @invoice.waiting?
+      InvoiceServices::ShipperUpdateStatusService.new(invoice: @invoice,
+        user_invoice: @user_invoice, status: "cancel", current_user: current_user).
+        perform if @invoice.waiting?
       render json: {message: I18n.t("report.create_success"),
         data: {report: @report}, code: 1}, status: 200
     else
@@ -23,7 +24,8 @@ class Api::V1::Shipper::ReportsController < Api::ShipperBaseController
   end
 
   def ensure_params_true
-    unless CheckParams.new(Review::REPORT_ATTRIBUTES_PARAMS, params[:report]).params_exist?
+    unless CheckParams.new(attributes_params: Review::REPORT_ATTRIBUTES_PARAMS,
+      params: params[:report]).perform?
       render json: {message: I18n.t("rate.missing_params"), data: {}, code: 0},
         status: 422
     end
@@ -56,8 +58,9 @@ class Api::V1::Shipper::ReportsController < Api::ShipperBaseController
   end
 
   def check_conditions_to_report
-    if CheckReportConditions.new(@invoice, @user_invoice, params[:report][:review_type],
-      current_user).shipper_report_conditions?
+    if ConditionReportServices::ShipperConditionService.new(invoice: @invoice,
+      user_invoice: @user_invoice, review_type: params[:report][:review_type],
+      current_user: current_user).perform?
       render json: {message: I18n.t("report.create_fail"), data: {},
         code: 0}, status: 200
     end

@@ -33,7 +33,8 @@ class Api::V1::Shop::InvoicesController < Api::ShopBaseController
     near_shippers = User.near([invoice.latitude_start, invoice.longitude_start],
       Settings.max_distance).shipper.is_online
     if invoice.save
-      InvoiceHistoryCreator.new(invoice, current_user.id).create_history invoice_params
+      HistoryServices::CreateInvoiceHistoryService.new(invoice: invoice,
+        creater_id: current_user.id).perform
       click_action = Settings.invoice_detail
       render json: {message: I18n.t("invoices.create.success"),
         data: {invoice: invoice}, code: 1}, status: 201
@@ -56,8 +57,9 @@ class Api::V1::Shop::InvoicesController < Api::ShopBaseController
 
   def update
     if params[:status]
-      if InvoiceStatus.new(@invoice, @user_invoice, params[:status],
-        current_user).shop_update_status
+      if InvoiceServices::ShopUpdateStatusService.new(invoice: @invoice,
+        user_invoice: @user_invoice, status: params[:status],
+        current_user: current_user).perform
         render json: {message: I18n.t("invoices.messages.update_success"),
           data: {invoice: @invoice}, code: 1}, status: 200
       else
@@ -66,7 +68,9 @@ class Api::V1::Shop::InvoicesController < Api::ShopBaseController
       end
     else
       if @invoice.init?
-        if InvoiceHistoryCreator.new(@invoice, current_user.id).create_history invoice_params
+        if @invoice.update_attributes invoice_params
+          HistoryServices::CreateInvoiceHistoryService.new(invoice: @invoice,
+            creater_id: current_user.id).perform
           render json: {message: I18n.t("invoices.update.success"),
             data:{invoice: @invoice}, code: 1}, status: 200
         else
@@ -109,7 +113,9 @@ class Api::V1::Shop::InvoicesController < Api::ShopBaseController
     statuses = Invoice.statuses
     if params[:status] && params[:status].in?(statuses)
       @user_invoice = @invoice.user_invoices.find_by status: @invoice.status
-      if CheckConditions.new(@invoice, @user_invoice, params[:status]).shop_conditions? current_user
+      if ConditionUpdateStatusServices::ShopConditionService.new(invoice: @invoice,
+        user_invoice: @user_invoice, update_status: params[:status],
+        current_user: current_user).perform?
         render json: {message: I18n.t("invoices.messages.cant_update"),
           data: {}, code: 0}, status: 200
       end
@@ -117,7 +123,8 @@ class Api::V1::Shop::InvoicesController < Api::ShopBaseController
   end
 
   def ensure_params_exist
-    unless CheckParams.new(Invoice::ATTRIBUTES_PARAMS, params[:invoice]).params_exist?
+    unless CheckParams.new(attributes_params: Invoice::ATTRIBUTES_PARAMS,
+      params: params[:invoice]).perform?
       render json: {message: I18n.t("invoices.messages.missing_params"),
         data: {}, code: 0}, status: 422
     end

@@ -1,10 +1,12 @@
 class CheckParams
-  def initialize attributes_params, params
-    @attributes_params = attributes_params
-    @params = params
+  attr_reader :args
+
+  def initialize args
+    @attributes_params = args[:attributes_params]
+    @params = args[:params]
   end
 
-  def params_exist?
+  def perform?
     if @params.class.to_s != "ActionController::Parameters" || @params.nil?
       return false
     else

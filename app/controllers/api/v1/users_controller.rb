@@ -25,7 +25,7 @@ class Api::V1::UsersController < Api::BaseController
       users = users.shipper
     end
     users = ActiveModelSerializers::SerializableResource.new(users,
-      each_serializer: UserSerializer)
+      each_serializer: UserSerializer, scope:{current_user: current_user})
     render json: {message: I18n.t("users.messages.get_shipper_success"),
       data: {users: users.as_json}, code: 1}, status: 200
   end

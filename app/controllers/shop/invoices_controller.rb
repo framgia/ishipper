@@ -22,7 +22,8 @@ class Shop::InvoicesController < Shop::ShopBaseController
       end
     else
       if @invoice.save
-        InvoiceHistoryCreator.new(@invoice, current_user.id).create_history invoice_params
+        HistoryServices::CreateInvoiceHistoryService.new(invoice: @invoice,
+          creater_id: current_user.id).perform
         flash[:success] = t "invoices.create.success"
         redirect_to root_path
       end
@@ -30,8 +31,9 @@ class Shop::InvoicesController < Shop::ShopBaseController
   end
 
   def update
-    if InvoiceStatus.new(@invoice, @user_invoice, params[:status] || invoice_params,
-      current_user).shop_update?
+    if InvoiceServices::ShopUpdateInvoiceService.new(invoice: @invoice,
+      user_invoice: @user_invoice, status: (params[:status] || invoice_params),
+      current_user: current_user).perform?
       flash[:success] = t "invoices.messages.update_success"
     else
       flash[:danger] = t "invoices.messages.cant_update"

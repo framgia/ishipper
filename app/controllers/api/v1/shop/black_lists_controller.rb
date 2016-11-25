@@ -31,8 +31,8 @@ class Api::V1::Shop::BlackListsController < Api::ShopBaseController
 
   private
   def ensure_params_true
-    unless CheckParams.new(BlackList::BLACK_LIST_ATTRIBUTES_PARAMS,
-      params[:black_list]).params_exist?
+    unless CheckParams.new(attributes_params: BlackList::BLACK_LIST_ATTRIBUTES_PARAMS,
+      params: params[:black_list]).perform?
       render json: {message: I18n.t("api.missing_params"), data: {},
         code: 0}, status: 422
     end
