@@ -3,7 +3,7 @@ class Api::V1::UserSettingsController < Api::BaseController
   include Confirm
 
   before_action :find_user_setting
-  before_action :ensure_params_true, only: :update
+  before_action :ensure_params_exist, only: :update
 
   def show
     render json: {message: I18n.t("user_setting.get.success"),

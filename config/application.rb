@@ -10,5 +10,6 @@ module IShipper
   class Application < Rails::Application
     config.time_zone = "Hanoi"
     config.active_record.default_timezone = :local
+    config.active_job.queue_adapter = :sidekiq
   end
 end

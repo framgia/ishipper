@@ -7,11 +7,9 @@ class Api::V1::Shop::ReportsController < Api::ShopBaseController
     @report.owner = current_user
     @report.recipient = @user_invoice.user
     if @report.save
-      if @invoice.shipping? || @invoice.waiting?
-        shop_update_status = InvoiceServices::ShopUpdateStatusService.new invoice: @invoice,
-          user_invoice: @user_invoice, status: "cancel", current_user: current_user
-        shop_update_status.perform?
-      end
+      shop_update_status = InvoiceServices::ShopUpdateStatusService.new invoice: @invoice,
+        user_invoice: @user_invoice, status: "cancel", current_user: current_user
+      shop_update_status.perform?
       render json: {message: I18n.t("report.create_success"),
         data: {report: @report}, code: 1}, status: 200
     else
@@ -43,8 +41,7 @@ class Api::V1::Shop::ReportsController < Api::ShopBaseController
   end
 
   def find_user_invoice
-    status = @invoice.status
-    @user_invoice = @invoice.user_invoices.find_by_status status
+    @user_invoice = @invoice.user_invoices.find_by_status @invoice.status
     if @user_invoice.nil?
       render json: {message: I18n.t("rate.invoice.get_user_invoice_fail"), data: {},
         code: 0}, status: 200

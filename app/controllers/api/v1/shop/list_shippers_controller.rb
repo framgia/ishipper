@@ -18,8 +18,8 @@ class Api::V1::Shop::ListShippersController < Api::ShopBaseController
 
   private
   def ensure_params_true
-    if params[:invoice].nil? or
-      params[:invoice].class.to_s != "ActionController::Parameters" or
+    if params[:invoice].nil? ||
+      params[:invoice].class.to_s != "ActionController::Parameters" ||
       params[:invoice][:id].nil?
       return render json:
         {message: I18n.t("invoices.messages.missing_params"), data: {}, code: 0},
