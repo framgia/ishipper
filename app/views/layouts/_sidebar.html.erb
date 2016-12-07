@@ -8,7 +8,7 @@
     <div id="Demo1" class="w3-accordion-content w3-animate-left">
       <% Settings.invoice.status.to_h.without(:reject).values.each do |status| %>
         <div href="javascript:void(0)" data-check="<%= status %>"
-          class="w3-border-bottom list-category w3-hover-light-grey <%= status %>-sidebar">
+          class="list-category <%= status %>-sidebar">
           <%= link_to t("invoices.#{status}"),
             shop_invoices_path(invoice: {status: status}),
             class: "hvr-sweep-to-top" %>
@@ -16,10 +16,10 @@
         </div>
       <% end %>
 
-      <div class="">
-        <div class="w3-container new-invoice">
+      <div class="btn-new_invoice">
+        <div class="bounceInUp">
           <%= link_to t("invoices.new"), new_shop_invoice_path,
-            class: "btn btn-primary btn-md" %>
+            class: "td-fix-w3 w3-padding-right" %>
         </div>
         <div class="clearfix"></div>
       </div>

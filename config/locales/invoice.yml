@@ -39,7 +39,7 @@ en:
     title: Invoice
     customer: Customer
     new: New Invoice
-    title-2: Your Invoices (6)
+    title-2: Menu
     all: All Invoices
     init: Init Invoices
     waiting: Waiting Invoices
