@@ -30,10 +30,8 @@ class Api::V1::Shop::InvoicesController < Api::ShopBaseController
 
   def create
     invoice = current_user.invoices.build invoice_params
-    passive_favorites = current_user.passive_favorites
-    near_shippers = User.near([invoice.latitude_start, invoice.longitude_start],
-      Settings.max_distance).shipper.users_online
     if invoice.save
+<<<<<<< 8c9a2bbdf628a6aed423ab213a78734e477aa1dd
       create_invoice_history = HistoryServices::CreateInvoiceHistoryService.new invoice: invoice,
         creater_id: current_user.id
       create_invoice_history.perform
@@ -41,6 +39,7 @@ class Api::V1::Shop::InvoicesController < Api::ShopBaseController
       create_status_invoice_history.perform
       render json: {message: I18n.t("invoices.create.success"),
         data: {invoice: invoice}, code: 1}, status: 200
+      passive_favorites = current_user.passive_favorites
       if passive_favorites.any?
         send_all_notification = NotificationServices::SendAllNotificationService.new owner: current_user,
           recipients: passive_favorites, status: "favorite", invoice: invoice, click_action: Settings.invoice_detail
@@ -48,6 +47,8 @@ class Api::V1::Shop::InvoicesController < Api::ShopBaseController
       end
       serializer = Invoices::ShipperInvoiceSerializer.new(invoice,
         scope: {current_user: current_user}).as_json
+      near_shippers = User.near([invoice.latitude_start, invoice.longitude_start],
+        Settings.max_distance).shipper.users_online
       if near_shippers.any?
         realtime_visibility_shipper = InvoiceServices::RealtimeVisibilityInvoiceService.new recipients: near_shippers,
           invoice: serializer, action: Settings.realtime.new_invoice

@@ -10,9 +10,11 @@ class NotificationServices::SendAllNotificationService
   end
 
   def perform
-    @recipients.each do |recipient|
-      NotificationServices::CreateNotificationService.new(owner: @owner, recipient: recipient,
-        status: @status, invoice: @invoice, click_action: @click_action).perform
-    end
+    # @recipients.each do |recipient|
+    #   NotificationServices::CreateNotificationService.new(owner: @owner, recipient: recipient,
+    #     status: @status, invoice: @invoice, click_action: @click_action).perform
+    # end
+    Notifications::SendNotificationAllJob.perform_now owner: @owner, recipients: @recipients,
+      status: @status, invoice: @invoice, click_action: @click_action
   end
 end
