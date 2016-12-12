@@ -45,8 +45,9 @@
 #map {
   height: 50vh;
   margin-bottom: 20px;
-  height: 500px !important;
+  height: 430px !important;
   position: relative;
+  padding-top: 69px;
 }
 
 #form_invoice_map_marker {
@@ -168,7 +169,7 @@
  /*END TD FIX*/
 
 #map-on-invoice {
-  height: 400px;
+  height: 300px;
 }
 
 .featured-info{
@@ -180,7 +181,7 @@
   left: 0px;
   right: 0px;
   width: 50px;
-  height: 511px;
+  height: 430px;
   z-index: 667;
 }
 
@@ -199,11 +200,11 @@
 
 .after_map{
   clear: left;
-  margin-top: 515px;
+  margin-top: 450px;
 }
 
 .colorgraph{
-  margin-top: 500px;
+  margin-top: 430px;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -225,7 +226,7 @@
   color: #303030;
   font-size: 1.4rem;
   font-weight: 400;
-  height: 56px;
+  height: 45px;
   line-height: 1.36;
   padding: .6rem 1rem .6rem;
   transition: border-color .1s linear;
@@ -233,21 +234,23 @@
 }
 
 .input-group-addon{
+  padding: 0px;
+  height: 45px;
   background-color: transparent;
   border: 1px solid #adadad;
   border-radius: 1px;
   box-shadow: none;
   color: #303030;
-  font-size: 1.4rem;
+  font-size: 1.43rem;
   font-weight: 500;
-  line-height: 1.36;
+  line-height: 1.0;
   transition: border-color .1s linear;
 }
 
 #main{
   color: red;
   background-image: image-url("road.jpg");
-  background-size: 190%;
+  background-size: 210%;
 }
 
 .input-group-addout{
@@ -259,8 +262,8 @@
   font-size: 1.4rem;
   font-weight: 400;
   transition: border-color .1s linear;
-  padding-top: 10px;
-  padding-bottom: 15px;
+  padding-top: 9px;
+  padding-bottom: 9px;
   padding-left: 4px;
   border-radius: 1px;
   box-shadow: none;
@@ -268,13 +271,17 @@
   margin-top: 10px;
 }
 
+.input-group-addout img{
+  width: 35px;
+  height: 30px;
+}
+
 .input-group-out{
-  margin-top: 10px;
+  margin-top: 15px;
   padding: 0px;
 }
 
 #distance_invoice{
-  width: 850.3px;
   border: none;
   background: transparent;
 }
@@ -287,11 +294,15 @@
   color: #303030;
   font-size: 1.4rem;
   font-weight: 400;
-  height: 56px;
+  height: 40px;
   line-height: 1.36;
-  padding: .7rem 1rem 1rem;
+  padding: 9px;
   transition: border-color .1s linear;
   vertical-align: baseline;
+}
+
+.input-group-addout img{
+  width: 40px;
 }
 
 .pointer{
@@ -327,6 +338,8 @@
 }
 
 .modal-content{
+  background-image: image-url("road.jpg");
+  background-size: 200%;
   background-color: #fff;
   box-shadow: 0 0 12px 2px rgba(0,0,0,0.35);
   opacity: 1;
@@ -337,4 +350,10 @@
   font-weight: 400;
   line-height: 1.36;
   font-size: 1.4rem;
+}
+
+.bt-next{
+  width: 100px;
+  padding-top: 30px;
+  margin-left: 20px;
 }
