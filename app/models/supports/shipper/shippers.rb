@@ -1,4 +1,9 @@
 class Supports::Shipper::Shippers < Supports::User
+  def initialize args
+    @current_user = args[:current_user]
+    @list_shippers = args[:shippers]
+  end
+
   def shippers
     @shippers ||= list_shippers
   end
@@ -10,12 +15,12 @@ class Supports::Shipper::Shippers < Supports::User
   private
   def shippers_near_by
     @shipper_settings ||= ShipperSetting.near([user_setting.latitude,
-      user_setting.longitude], Settings.max_distance, order: false).includes :shipper
+      user_setting.longitude], Settings.max_distance, order: false).includes shipper: [:user_setting]
   end
 
   def shipper_settings
-    if @users
-      @users.includes(:user_invoices, shipper_setting: [:shipper]).collect do |shipper|
+    if @list_shippers
+      @list_shippers.includes(:user_invoices, user_setting: [:shipper]).collect do |shipper|
         shipper.shipper_setting
       end
     else
@@ -25,40 +30,23 @@ class Supports::Shipper::Shippers < Supports::User
 
   def base_list_shippers
     shipper_settings.collect do |shipper_setting|
-      Hash[:id, shipper_setting.shipper.id,
-        :name, shipper_setting.shipper.name,
-        :email, shipper_setting.shipper.email,
-        :address, shipper_setting.shipper.address,
-        :current_location, shipper_setting.current_location,
-        :latitude, shipper_setting.latitude,
-        :longitude, shipper_setting.longitude,
-        :phone_number, shipper_setting.shipper.phone_number,
-        :plate_number, shipper_setting.shipper.plate_number,
-        :rate, shipper_setting.shipper.rate
-      ]
+      Supports::User.new(user: shipper_setting.shipper).base_user
+      # Supports::Shipper::Shipper.new(shipper: shipper_setting.shipper).shipper
     end.to_json
   end
 
   def list_shippers
     shipper_settings.collect do |shipper_setting|
-      shipper = Supports::Shipper::Shipper.new current_user: @current_user,
-        shipper: shipper_setting.shipper, invoice: @invoice
-      Hash[:id, shipper_setting.shipper.id,
-        :name, shipper_setting.shipper.name,
-        :email, shipper_setting.shipper.email,
-        :address, shipper_setting.shipper.address,
-        :current_location, shipper_setting.current_location,
-        :latitude, shipper_setting.latitude,
-        :longitude, shipper_setting.longitude,
-        :phone_number, shipper_setting.shipper.phone_number,
-        :plate_number, shipper_setting.shipper.plate_number,
-        :rate, shipper_setting.shipper.rate,
-        :actions, shipper.actions,
-        :favorite_user, shipper.favorite_user,
-        :number_finished_invoice, shipper.number_finished_invoice,
-        :number_all_invoice, shipper.number_all_invoice,
-        :user_invoice_id, shipper.user_invoice_id
-      ]
+      support_shipper = Supports::Shipper::Shipper.new current_user: @current_user,
+        shipper: shipper_setting.shipper
+      support_user = Supports::User.new user: shipper_setting.shipper
+
+      shipper = support_user.base_user
+      shipper[:actions] = support_shipper.actions
+      shipper[:favorite_user] = support_shipper.favorite_user
+      shipper[:number_finished_invoice] = support_shipper.number_finished_invoice
+      shipper[:number_all_invoice] = support_shipper.number_all_invoice
+      shipper
     end
   end
 end

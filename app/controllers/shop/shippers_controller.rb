@@ -8,7 +8,7 @@ class Shop::ShippersController < Shop::ShopBaseController
     end
     @shippers = search_advanced @shippers, params["search"] if params["search"]
     @shippers = Supports::Shipper::Shippers.new(current_user: current_user,
-      users: @shippers, params: nil).shippers
+      shippers: @shippers).shippers
     @current_type = params[:type].present? ? params[:type] : Settings.shipper.types.list_shipper_received
   end
 
@@ -16,7 +16,7 @@ class Shop::ShippersController < Shop::ShopBaseController
     if params[:action_type] && current_user.send("#{params[:action_type]}", "#{params[:id]}")
       @shippers = current_user.send params[:current_type]
       @shippers = Supports::Shipper::Shippers.new(current_user: current_user,
-        users: @shippers, params: nil).shippers
+        shippers: @shippers).shippers
       @current_type = params[:current_type]
     end
   end

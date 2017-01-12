@@ -5,11 +5,10 @@ class Api::V1::InvoicesController < Api::BaseController
     params[:black_list_user_id] = current_user.id
     invoices = Invoice.search params
     if invoices.any?
-      serializers = ActiveModelSerializers::SerializableResource.new(invoices,
-        each_serializer: Invoices::ShipperInvoiceSerializer,
-        scope:{current_user: current_user}).as_json
+      invoices = Supports::Invoice::ShipperInvoices.new(invoices: invoices,
+        current_user: current_user).shipper_invoices
       render json: {message: I18n.t("invoices.messages.get_invoices_success"),
-        data: {invoices: serializers}, code: 1}, status: 200
+        data: {invoices: invoices}, code: 1}, status: 200
     else
       render json: {message: I18n.t("invoices.messages.get_invoices_fails"),
         data: {}, code: 1}, status: 200

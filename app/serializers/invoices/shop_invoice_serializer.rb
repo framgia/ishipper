@@ -12,9 +12,7 @@ class Invoices::ShopInvoiceSerializer < InvoiceSerializer
   end
 
   def number_of_recipients
-    shippers = object.all_shipper
-    shippers = shippers - scope[:current_user].black_list_users
-    shippers.size
+    object.received_shippers.size
   end
 
   def status_histories

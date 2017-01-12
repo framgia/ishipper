@@ -4,8 +4,22 @@ class Supports::User
   def initialize args
     @current_user = args[:current_user]
     @params = args[:params]
-    @users = args[:users]
-    @invoice = args[:invoice]
+    @user = args[:user]
+  end
+
+  def base_user
+    Hash[:id, @user.id,
+      :name, @user.name,
+      :email, @user.email,
+      :address, @user.address,
+      :current_location, @user.user_setting.current_location,
+      :latitude, @user.user_setting.latitude,
+      :longitude, @user.user_setting.longitude,
+      :phone_number, @user.phone_number,
+      :plate_number, @user.plate_number,
+      :role, @user.role,
+      :rate, @user.rate
+    ]
   end
 
   ["favorite_list_users", "black_list_users"].each do |user_type|

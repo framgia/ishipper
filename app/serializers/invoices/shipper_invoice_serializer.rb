@@ -9,8 +9,7 @@ class Invoices::ShipperInvoiceSerializer < InvoiceSerializer
   end
 
   def user_invoice_id
-    user_invoice = UserInvoice.find_by invoice_id: object.id, user: scope[:current_user],
-      status: object.status
+    user_invoice = UserInvoice.find_by invoice_id: object.id, user: scope[:current_user]
     if user_invoice
       user_invoice.id
     else

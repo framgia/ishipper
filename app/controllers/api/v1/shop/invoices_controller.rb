@@ -8,7 +8,7 @@ class Api::V1::Shop::InvoicesController < Api::ShopBaseController
     @invoices = if params[:status] == "all"
       current_user.invoices
     else
-      Invoice.invoice_by_status_for_shop params[:status], current_user.id
+      current_user.invoices.send("#{params[:status]}")
     end
     @q = Hash.new
     @q[:type] = "name"

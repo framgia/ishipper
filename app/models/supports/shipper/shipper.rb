@@ -1,4 +1,4 @@
-class Supports::Shipper::Shipper
+class Supports::Shipper::Shipper < Supports::User
   def initialize args
     @current_user = args[:current_user]
     @shipper = args[:shipper]
@@ -36,12 +36,12 @@ class Supports::Shipper::Shipper
   end
 
   def user_invoice_id
-    if @invoice
-      user_invoice = @invoice.user_invoices.find_by user_id: @shipper.id,
-        status: @invoice.status
-      user_invoice ? user_invoice.id : nil
+    user_invoice = @shipper.user_invoices.find{|user_invoice|
+      user_invoice.invoice_id == @invoice.id}
+    if user_invoice
+      user_invoice.id
     else
-      nil
+      0
     end
   end
 end
