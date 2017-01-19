@@ -13,11 +13,13 @@ class Api::V1::Shop::InvoicesController < Api::ShopBaseController
     @q = Hash.new
     @q[:type] = "name"
     @q[:data] = params[:query]
-    @invoices = @invoices.search_invoice @q if params[:query].present?
     @invoices = @invoices.order_by_update_time
-    invoices_simple = Simples::Invoice::ShopInvoicesSimple.new object: @invoices.
-      includes(:user, :status_invoice_histories), scope: {current_user: current_user}
-    @invoices = invoices_simple.simple
+    @invoices = @invoices.search_invoice @q if params[:query].present?
+    if @invoices.any?
+      invoices_simple = Simples::Invoice::ShopInvoicesSimple.new object: @invoices.
+        includes(:user, :status_invoice_histories, user_invoices: [user: [:user_setting]])
+      @invoices = invoices_simple.simple
+    end
     render json: {message: I18n.t("invoices.messages.get_invoices_success"),
       data: {invoices: @invoices}, code: 1}, status: 200
   end
@@ -46,10 +48,13 @@ class Api::V1::Shop::InvoicesController < Api::ShopBaseController
       render json: {message: I18n.t("invoices.create.success"),
         data: {invoice: @invoice_simple}, code: 1}, status: 200
 
+      shipper_invoice = Simples::Invoice::ShipperInvoicesSimple.new object: @invoice
+      @shipper_invoice = shipper_invoice.simple
       @passive_favorites = current_user.passive_favorites
       if @passive_favorites.any?
         send_all_notification = NotificationServices::SendAllNotificationService.new owner: current_user,
-          recipients: @passive_favorites, status: "favorite", invoice: @invoice, click_action: Settings.invoice_detail
+          recipients: @passive_favorites.includes(:user_tokens), status: "favorite", invoice: @invoice,
+          click_action: Settings.invoice_detail, invoice_simple: @shipper_invoice
         send_all_notification.perform
       end
 
@@ -58,7 +63,7 @@ class Api::V1::Shop::InvoicesController < Api::ShopBaseController
       @near_shippers = Shipper.users_by_user_setting(@shipper_setting).users_online
       if @near_shippers.any?
         realtime_visibility_shipper = InvoiceServices::RealtimeVisibilityInvoiceService.
-          new recipients: @near_shippers, invoice: @invoice, action: Settings.realtime.new_invoice
+          new recipients: @near_shippers, invoice: @shipper_invoice, action: Settings.realtime.new_invoice
         realtime_visibility_shipper.perform
       end
     else
@@ -138,6 +143,15 @@ class Api::V1::Shop::InvoicesController < Api::ShopBaseController
     unless check_params.perform?
       render json: {message: I18n.t("invoices.messages.missing_params"),
         data: {}, code: 0}, status: 422
+    end
+  end
+
+  def find_object
+    @invoice = Invoice.includes(:status_invoice_histories,
+      user_invoices: [user: [:user_setting]]).find_by_id params[:id]
+    unless @invoice
+      render json: {message: I18n.t("invoices.messages.invoice_not_found"),
+        data: {}, code: 0}, status: 200
     end
   end
 end

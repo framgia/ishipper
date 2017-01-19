@@ -42,8 +42,6 @@ class Api::SessionsController < Devise::SessionsController
           shop_settings = UserSetting.near [@user.shipper_setting.latitude,
             @user.shipper_setting.longitude], Settings.max_distance, order: false
           @near_shops = Shop.users_by_user_setting(shop_settings).users_online
-          users_simple = Simples::UsersSimple.new object: @user
-          @user = users_simple.simple
           shipper_is_offline
         end
       end
@@ -55,7 +53,7 @@ class Api::SessionsController < Devise::SessionsController
 
   private
   def user_params
-    params.require(:user).permit :phone_number, :password
+    params.require(:user).permit :phone_number, :password, :registration_id
   end
 
   def invalid_login_attempt
@@ -63,14 +61,18 @@ class Api::SessionsController < Devise::SessionsController
   end
 
   def generate_user_token
+    user_token = @user.user_tokens.find_by registration_id: user_params[:registration_id]
+    user_token.destroy unless user_token.nil?
     @user_token = @user.user_tokens.create! authentication_token: Devise.friendly_token,
-      registration_id: user_params[:registration_id],
-      device_id: user_params[:device_id]
+      registration_id: user_params[:registration_id]
   end
 
   def shipper_is_offline
+    users_simple = Simples::UsersSimple.new object: @user
+    @shipper = users_simple.simple
     realtime_visibility_shipper = ShipperServices::RealtimeVisibilityShipperService.
-      new recipients: @near_shops, shipper: @user, action: Settings.realtime.shipper_offline
+      new recipients: @near_shops, shipper: @shipper,
+      action: Settings.realtime.shipper_offline
     realtime_visibility_shipper.perform
   end
 

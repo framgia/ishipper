@@ -17,7 +17,7 @@ class InvoiceServices::ShopAcceptShipperService
         status: @status).perform
       NotificationServices::CreateNotificationService.new(owner: @current_user,
         recipient: @user_invoice.user, status: @status, invoice: @invoice,
-        click_action: Settings.invoice_detail).perform
+        click_action: Settings.invoice_detail, invoice_simple: @invoice).perform
       @invoice.user_invoices.each do |user_invoice|
         unless @user_invoice == user_invoice
           user_invoice.rejected!

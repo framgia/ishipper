@@ -7,10 +7,11 @@ class NotificationServices::SendAllNotificationService
     @status = args[:status]
     @invoice = args[:invoice]
     @click_action = args[:click_action]
+    @invoice_simple = args[:invoice_simple]
   end
 
   def perform
     Notifications::SendNotificationAllJob.perform_now owner: @owner, recipients: @recipients,
-      status: @status, invoice: @invoice, click_action: @click_action
+      status: @status, invoice: @invoice, click_action: @click_action, invoice_simple: @invoice_simple
   end
 end

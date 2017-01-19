@@ -49,7 +49,7 @@ class Api::V1::Shipper::UserInvoicesController < Api::ShipperBaseController
       create_user_invoice_history.perform
       create_notification = NotificationServices::CreateNotificationService.new owner: current_user,
         recipient: @recipient, status: "receive", invoice: @invoice,
-        click_action: Settings.list_shipper_register
+        click_action: Settings.list_shipper_register, invoice_simple: @invoice
       create_notification.perform
     end
   end
@@ -58,9 +58,9 @@ class Api::V1::Shipper::UserInvoicesController < Api::ShipperBaseController
     if @user_invoice.update_attributes status: "rejected"
       render json: {message: I18n.t("user_invoices.cancel_request.success"), data: {},
         code: 1}, status: 200
-      list_shippers_simple = Simples::Shipper::ShippersSimple.new object: current_user,
+      shipper_simple = Simples::Shipper::ListShippersSimple.new object: current_user,
         scope: {invoice: @user_invoice.invoice, current_user: current_user}
-      @shipper = list_shippers_simple.simple
+      @shipper = shipper_simple.simple
       realtime_channel = "#{@user_invoice.invoice.user.phone_number}_realtime_channel"
         data = Hash.new
         data[:user] = current_user

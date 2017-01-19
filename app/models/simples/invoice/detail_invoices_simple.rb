@@ -13,13 +13,9 @@ class Simples::Invoice::DetailInvoicesSimple < Simples::InvoicesSimple
   end
 
   def status_histories
-    if @object.init?
-      nil
-    else
-      status_history = Simples::Invoice::StatusInvoiceHistoriesSimple.
-        new object: @object.status_invoice_histories
-      status_history.simple
-    end
+    status_history = Simples::Invoice::StatusInvoiceHistoriesSimple.
+      new object: @object.status_invoice_histories
+    status_history.simple
   end
 
   def number_of_recipients

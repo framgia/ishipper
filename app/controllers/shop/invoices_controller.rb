@@ -37,20 +37,20 @@ class Shop::InvoicesController < Shop::ShopBaseController
           Settings.max_distance, order: false
         near_shippers = Shipper.users_by_user_setting(shipper_settings).users_online.
           includes :user_tokens, :user_setting
+        invoice_simple = Simples::InvoicesSimple.new object: @invoice,
+          scope: {current_user: current_user}
+        @invoice_simple = invoice_simple.simple
         if passive_favorites.any?
           send_all_notification = NotificationServices::SendAllNotificationService.new owner: current_user,
             recipients: passive_favorites, status: "favorite", invoice: @invoice,
-            click_action: Settings.invoice_detail
+            click_action: Settings.invoice_detail, invoice_simple: @invoice_simple
           send_all_notification.perform
         end
 
-        invoice_simple = Simples::InvoicesSimple.new object: @invoice,
-          scope: {current_user: current_user}
-        @invoice = invoice_simple.simple
 
         if near_shippers.any?
           realtime_visibility_shipper = InvoiceServices::RealtimeVisibilityInvoiceService.
-            new recipients: near_shippers, invoice: @invoice, action: Settings.realtime.new_invoice
+            new recipients: near_shippers, invoice: @invoice_simple, action: Settings.realtime.new_invoice
           realtime_visibility_shipper.perform
         end
         flash[:success] = t "invoices.create.success"

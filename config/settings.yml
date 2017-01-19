@@ -109,3 +109,4 @@ type_update:
   invoice: invoice
 per_list_invoice: 10
 per_list_shipper: 10
+date_format: "%d/%m/%Y"

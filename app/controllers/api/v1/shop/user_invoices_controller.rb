@@ -16,7 +16,7 @@ class Api::V1::Shop::UserInvoicesController < Api::ShopBaseController
 
   private
   def check_limited_shipper
-    @user_invoices = @user_invoice.user.user_invoices
+    @user_invoices = @user_invoice.user.user_invoices.includes :user
     user_invoices_init = @user_invoices.init
     unless @user_invoices.waiting.count < Settings.max_invoice
       shop_check_limited_shipper = ShipperReceiveLimitServices::ShopCheckLimitedShipperService.

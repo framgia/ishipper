@@ -7,6 +7,7 @@ class NotificationServices::CreateNotificationService
     @status = args[:status]
     @invoice = args[:invoice]
     @click_action = args[:click_action]
+    @invoice_simple = args[:invoice_simple]
   end
 
   def perform
@@ -23,8 +24,9 @@ class NotificationServices::CreateNotificationService
           action: Settings.realtime.unread_notification, data: data
       end
       if user_setting.receive_notification?
-        Notifications::SendNotificationJob.perform_now notification: @notification, owner: @owner,
-          recipient: @recipient, status: @status, invoice: @invoice, click_action: @click_action
+        Notifications::SendNotificationJob.perform_now notification: @notification,
+          owner: @owner, recipient: @recipient, status: @status, invoice: @invoice,
+          click_action: @click_action, invoice_simple: @invoice_simple
         notification_channel = "#{@recipient.phone_number}_notification_channel"
         Notifications::WebNotificationBroadcastJob.perform_now channel: notification_channel,
           owner: @owner, invoice: @invoice, notification: @notification

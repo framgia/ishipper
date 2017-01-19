@@ -4,7 +4,7 @@ class Api::V1::Shop::ListShippersController < Api::ShopBaseController
   def index
     @shippers = @invoice.received_shippers
     shippers_simple = Simples::Shipper::ListShippersSimple.new object: @shippers.
-      includes(:user_invoices, :user_setting), scope: {current_user: current_user, invoice: @invoice}
+      includes(:user_invoices, :user_setting, :user_tokens), scope: {current_user: current_user, invoice: @invoice}
     @shippers = shippers_simple.simple
     if @shippers.blank?
       render json: {message: I18n.t("invoices.messages.get_shippers_fails"),

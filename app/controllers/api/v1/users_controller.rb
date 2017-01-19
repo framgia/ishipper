@@ -13,22 +13,24 @@ class Api::V1::UsersController < Api::BaseController
 
   def index
     if params[:user][:search]
-      role = if current_user.shop?
+      q = Hash.new
+      q[:role] = if current_user.shop?
         "Shipper"
       elsif current_user.shipper?
         "Shop"
       end
-      users = User.search_user role, params[:user][:search]
+      q[:data] = params[:user][:search]
+      @users = current_user.search_user q
     else
       shipper_settings = ShipperSetting.near([current_user.user_setting.latitude,
         current_user.user_setting.longitude], Settings.max_distance, order: false).
         includes :shipper
-      users = User.users_by_user_setting(shipper_settings).users_online
+      @users = User.users_by_user_setting(shipper_settings).users_online
     end
-    users_simple = Simples::Shipper::ListShippersSimple.new object: users.includes(:user_setting)
-    users = users_simple.simple
+    users_simple = Simples::Shipper::ListShippersSimple.new object: @users.includes(:user_setting, :user_tokens)
+    @users = users_simple.simple
     render json: {message: I18n.t("users.messages.get_shipper_success"),
-      data: {users: users}, code: 1}, status: 200
+      data: {users: @users}, code: 1}, status: 200
   end
 
   def update

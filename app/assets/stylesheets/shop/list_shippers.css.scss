@@ -290,6 +290,7 @@
 
     }
     .panel {
+      font-size: 13px;
 
       .hatd-shippers-table-title {
         background-color: #f5f5f5;
@@ -309,6 +310,10 @@
 
           .reverse {
             transform: rotate(180deg) !important;
+          }
+
+          strong{
+            font-size: 13px;
           }
         }
       }

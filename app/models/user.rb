@@ -31,8 +31,6 @@ class User < ApplicationRecord
 
   enum status: [:unactive, :actived, :block_temporary, :blocked]
 
-  scope :search_user, -> role, data {where("role = ? AND (phone_number = ? OR
-    name LIKE ?)", role, data, "%#{data}%")}
   scope :shipper, -> {where role: "Shipper"}
   scope :shop, -> {where role: "Shop"}
   scope :order_by_time, -> {order created_at: :desc}
@@ -56,20 +54,20 @@ class User < ApplicationRecord
   self.inheritance_column = :role
 
   class << self
-    def search_shipper q
-      query = q[:type] ? "LOWER(#{q[:type]}) LIKE LOWER('%#{q[:data]}%')" : ""
-      shippers = self.where query
-      shippers = shippers.order("#{q[:attribute]}".to_sym => "#{q[:sortable]}".to_sym) if q[:attribute]
-      shippers.empty? ? self.all : shippers
-    end
-
     def users_token
       UserToken.where user_id: self.ids
     end
 
     def users_online
-      self.where id: self.users_token.select{|user_token| user_token.user_id if user_token.online?}
+      self.where id: self.users_token.online.map{|user_token| user_token.user_id}
     end
+  end
+
+  def search_user q
+    ids = q[:role].constantize.ids - black_list_users.map{|favorite_user|
+      favorite_user.id} - favorite_list_users.map{|black_user| black_user.id} - Array.new(id)
+    users = q[:role].constantize.where id: ids
+    users.where("phone_number = ? OR name LIKE ?", q[:data], "%#{q[:data]}%")
   end
 
   def email_required?
@@ -153,7 +151,7 @@ class User < ApplicationRecord
   end
 
   def online?
-    self.user_tokens.find_by(online: true).present?
+    self.user_tokens.find{|user_token| user_token.online?}.present?
   end
 
   def report? invoice

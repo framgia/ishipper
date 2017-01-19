@@ -8,6 +8,7 @@ class Notifications::SendNotificationJob < ActiveJob::Base
     status = args[:status]
     invoice = args[:invoice]
     click_action = args[:click_action]
+    invoice_simple = args[:invoice_simple]
 
     fcm = FCM.new ENV["FIREBASE_API_KEY"]
     registration_ids = []
@@ -15,18 +16,10 @@ class Notifications::SendNotificationJob < ActiveJob::Base
       registration_ids << user_token.registration_id unless user_token.registration_id.nil?
     end
     text = I18n.t("notifications.#{status}", user_name: owner.name, invoice_name: invoice.name)
-    if recipient.shipper?
-      invoice_simple = Simples::InvoicesSimple.new object: invoice,
-        scope: {current_user: recipient}
-      invoice = invoice_simple.simple
-    else
-      invoices_simple = Simples::InvoicesSimple.new object: invoice,
-        scope: {current_user: owner}
-      invoice = invoices_simple.simple
-    end
     options = {notification: {title: I18n.t("notifications.app_name"), text: text,
       click_action: click_action}, data: {notification_id: notification.id,
-      click_action: click_action, invoice_id: invoice[:id], user: owner, invoice: invoice}}
+      click_action: click_action, invoice_id: invoice.id, user: owner,
+      created_time: (notification.created_at.to_f * 1000).to_i, invoice: invoice_simple}}
     response = fcm.send registration_ids, options
   end
 end

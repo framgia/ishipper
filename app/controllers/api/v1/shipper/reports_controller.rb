@@ -8,9 +8,6 @@ class Api::V1::Shipper::ReportsController < Api::ShipperBaseController
     @report.recipient = @invoice.user
     @report.review_type = "report"
     if @report.save
-      shipper_update_status = InvoiceServices::ShipperUpdateStatusService.new invoice: @invoice,
-        user_invoice: @user_invoice, update_status: "cancel", current_user: current_user
-      shipper_update_status.perform?
       render json: {message: I18n.t("report.create_success"),
         data: {report: @report}, code: 1}, status: 200
     else

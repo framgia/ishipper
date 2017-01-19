@@ -15,9 +15,11 @@ class Supports::Invoice
 
   def shipper
     unless @invoice.init?
-      @user_invoice = @invoice.user_invoices.find_by status: @invoice.status
+      @user_invoice = @invoice.user_invoices.find{|user_invoice|
+        user_invoice.status == @invoice.status}
       if @user_invoice
-        ActiveModelSerializers::SerializableResource.new(@user_invoice.user).as_json
+        users_simple = Simples::UsersSimple.new object: @user_invoice.user
+        users_simple.simple
       end
     end
   end

@@ -8,9 +8,6 @@ class Api::V1::Shop::ReportsController < Api::ShopBaseController
     @report.recipient = @user_invoice.user
     @report.review_type = "report"
     if @report.save
-      shop_update_status = InvoiceServices::ShopUpdateStatusService.new invoice: @invoice,
-        user_invoice: @user_invoice, update_status: "cancel", current_user: current_user
-      shop_update_status.perform?
       render json: {message: I18n.t("report.create_success"),
         data: {report: @report}, code: 1}, status: 200
     else

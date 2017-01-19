@@ -1,5 +1,4 @@
 class Shop::ShippersController < Shop::ShopBaseController
-
   def index
     @shippers = if params[:type]
       current_user.send params[:type]

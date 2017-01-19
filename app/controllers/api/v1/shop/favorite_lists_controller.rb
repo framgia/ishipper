@@ -5,7 +5,7 @@ class Api::V1::Shop::FavoriteListsController < Api::ShopBaseController
 
   def index
     @users = current_user.favorite_list_users
-    users_simple = Simples::BaseSimple.new object: @users, class_name:
+    users_simple = Simples::BaseSimple.new object: @users.includes(:user_setting), class_name:
       "Simples::User::FavoriteUsersSimple", scope: {current_user: current_user}
     @users = users_simple.simple
     render json: {message: I18n.t("favorite_list.get_favorite_list_success"),

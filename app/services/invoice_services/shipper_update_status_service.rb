@@ -22,7 +22,7 @@ class InvoiceServices::ShipperUpdateStatusService
           status: @update_status).perform
         NotificationServices::CreateNotificationService.new(owner: @current_user,
           recipient: @invoice.user, status: @update_status, invoice: @invoice,
-          click_action: Settings.invoice_detail).perform
+          click_action: Settings.invoice_detail, invoice_simple: @invoice).perform
       end
     end
     return true

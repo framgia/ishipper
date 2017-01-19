@@ -51,11 +51,11 @@ class Simples::BaseSimple
           simples[method.to_sym] = self.send method
         end
       end
-    end
 
-    self.class.condition.each do |key, value|
-      unless self.send value
-        simples.delete key
+      self.class.condition.each do |key, value|
+        unless self.send value
+          simples.delete key
+        end
       end
     end
     simples

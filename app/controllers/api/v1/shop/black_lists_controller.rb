@@ -5,7 +5,7 @@ class Api::V1::Shop::BlackListsController < Api::ShopBaseController
 
   def index
     @users = current_user.black_list_users
-    users_simple = Simples::BaseSimple.new object: @users, class_name:
+    users_simple = Simples::BaseSimple.new object: @users.includes(:user_setting), class_name:
       "Simples::User::BlackUsersSimple", scope: {current_user: current_user}
     @users = users_simple.simple
     render json: {message: I18n.t("black_list.get_black_list_success"),

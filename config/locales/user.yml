@@ -59,3 +59,5 @@ en:
     invalid: invalid
   load_more: Load More
   show_less: Show Less
+  shipper_not_found: Shipper not found
+  shop_not_found: Shop not found

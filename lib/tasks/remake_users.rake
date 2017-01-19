@@ -84,7 +84,7 @@ namespace :db do
     load_users = User.all
     load_users.each do |user|
       user_tokens << UserToken.new(authentication_token: user.phone_number,
-        online: false, user_id: user.id)
+        online: false, user_id: user.id, registration_id: user.phone_number)
       latitude = Faker::Number.between(0, 25000)
       latitude = 21 + latitude/1000000.0
       longitude = Faker::Number.between(825000, 865000)

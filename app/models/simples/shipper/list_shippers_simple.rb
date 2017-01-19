@@ -7,8 +7,8 @@ class Simples::Shipper::ListShippersSimple < Simples::UsersSimple
 
   def user_invoice_id
     if @invoice
-      @user_invoice = @invoice.user_invoices.find{|user_invoice|
-        user_invoice.user_id == @object.id && user_invoice.status == @invoice.status}
+      @user_invoice = @object.user_invoices.find{|user_invoice|
+        user_invoice.invoice_id == @invoice.id && user_invoice.status == @invoice.status}
       @user_invoice ? @user_invoice.id : 0
     else
       0

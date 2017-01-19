@@ -76,19 +76,17 @@ class Invoice < ApplicationRecord
       params.slice :price, :shipping_price, :distance_invoice, :weight
     end
 
-    def search params = {}
+    def load_init_invoice params = {}
       user_ids = self.init.distinct :user_id
       black_ids = BlackList.where(owner_id: user_ids).map{|black_list|
         black_list.owner_id if black_list.black_list_user_id == params[:black_list_user_id]}
       valid_ids = user_ids - black_ids
       valid_invoices = self.where user_id: valid_ids
-
       if params[:user].present?
         invoices = valid_invoices.near [params[:user][:latitude],
         params[:user][:longitude]], params[:user][:distance] if
         params[:user][:latitude] && params[:user][:longitude] &&
         params[:user][:distance]
-
         invoices = Hash.new unless params[:user].keys.to_set.subset? USER_PARAMS
 
       elsif params[:invoice].present?
@@ -113,7 +111,7 @@ class Invoice < ApplicationRecord
       query = q[:type] ? "LOWER(#{q[:type]}) LIKE LOWER('%#{q[:data]}%')" : ""
       invoices = self.where query
       invoices = invoices.order("#{q[:attribute]}".to_sym => "#{q[:sortable]}".to_sym) if q[:attribute]
-      invoices.empty? ? self : invoices
+      invoices.empty? ? Array.new : invoices
     end
   end
 end
