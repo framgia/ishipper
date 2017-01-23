@@ -590,6 +590,7 @@
 
         .div-table-content {
           max-height: 67vh;
+          position: relative;
 
           tr {
             cursor: pointer;
@@ -612,9 +613,7 @@
           }
 
           .lvc-invoive-info {
-            position: relative;
-            float: left;
-            height: 0px;
+            position: fixed;
             width: 100%;
             display: none;
             opacity: 0;
@@ -624,17 +623,13 @@
               border-top: 1px #CCCCCC solid;
               border-bottom: 1px #CCCCCC solid;
               background: #CCFFCC;
-              min-width: 182px !important;
+              width: 15%;
 
               .clear-padding{
                 clear: both;
                 height: 10px;
               }
             }
-          }
-
-          .lvc-invoive-info:nth-last-child(1) {
-            float: none;
           }
 
           td {
