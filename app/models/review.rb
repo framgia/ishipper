@@ -10,4 +10,5 @@ class Review < ApplicationRecord
   REVIEW_ATTRIBUTES_PARAMS = [:recipient_id]
 
   scope :report_in_day, -> {where "created_at >=?", Time.zone.now - 1.day}
+  scope :reviews
 end
