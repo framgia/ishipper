@@ -103,7 +103,7 @@ en:
     cancel: Cancel this invoice
     customers:
       name: Name of customer
-      phone_number: Phone number of customer
+      phone_number: Number of customer
     search: Search...
   vnd: " VND"
   kg: Kg
