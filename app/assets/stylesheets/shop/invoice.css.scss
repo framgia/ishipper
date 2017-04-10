@@ -106,6 +106,21 @@
         width: 100%;
         z-index: 2;
 
+        .back {
+          float: left;
+
+          .btn-back {
+            padding: 17px;
+            color: #FFF;
+            background-color: transparent;
+            border: none;
+
+            .nht-icon {
+              font-size: 25px !important;
+            }
+          }
+        }
+
         .lvc-invoice-search {
           position: relative;
           float: left;
