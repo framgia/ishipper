@@ -129,7 +129,7 @@ document.addEventListener("turbolinks:load", function() {
 
   });
 
-  $('.nht-notification').on('click', function() {
+  $(document).on('click', '.nht-notification', function() {
     id = parseInt(this.className.split(' ')[1].split('-')[1]);
     App.notification.speak({action_type: "unread_notification", notification_id: id});
   });
